@@ -4,7 +4,7 @@ Template for web based studies using Vue and Vuetify
 
 ## Recommended IDE Setup
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur)
 
 ## Customize configuration
 
@@ -21,6 +21,8 @@ npm install
 ```sh
 npm run dev
 ```
+Then open a browser window and visit http://localhost:5173?pid=test where "test" represents the participant's ID.
+
 
 ### Compile and Minify for Production
 
