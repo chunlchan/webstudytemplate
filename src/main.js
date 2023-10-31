@@ -2,6 +2,9 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 
+//sweetalert CSS
+import 'sweetalert2/dist/sweetalert2.min.css'
+
 // Vuetify
 import 'vuetify/styles'
 import { createVuetify } from 'vuetify'

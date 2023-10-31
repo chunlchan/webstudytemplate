@@ -16,6 +16,24 @@ const router = createRouter({
       meta: { oneWay: true }
     },
     {
+      path: '/micTest',
+      name: 'micTest',
+      component:  () => import('../views/MicTest.vue'),
+      meta: { oneWay: true }
+    },    
+    {
+      path: '/audioTest',
+      name: 'audioTest',
+      component:  () => import('../views/AudioTest.vue'),
+      meta: { oneWay: true }
+    },
+    {
+      path: '/instructions',
+      name: 'instructions',
+      component:  () => import('../views/InstructionsView.vue'),
+      meta: { oneWay: true }
+    },    
+    {
       path: '/experiment',
       name: 'experiment',
       component: () => import('../views/ExperimentView.vue'),
