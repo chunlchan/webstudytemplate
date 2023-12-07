@@ -9,12 +9,6 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
-
-onMounted(()=>{
-    window.onbeforeunload = null;
-})
-
 const submit = () => {
     //replace this with your completion URL
     const completionUrl = "https://www.northwestern.edu";

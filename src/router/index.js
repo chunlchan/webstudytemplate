@@ -50,6 +50,13 @@ const router = createRouter({
 
 //"oneWay" routes are only allowed to move forward, back button is efffectively disabled
 router.beforeEach(async (to, from, next) => {
+  if (next.name == 'end') {
+    window.onbeforeunload = null
+  } else {
+    window.onbeforeunload = function () {
+      return "Are you sure you want to leave?";
+    };
+  }
   if (from.meta.oneWay == true) {
     let routes = router.getRoutes();
     let currentRoutePos;

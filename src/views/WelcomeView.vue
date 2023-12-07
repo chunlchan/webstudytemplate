@@ -17,10 +17,6 @@ const route = useRoute();
 const store = useStore();
 
 onMounted(() => {
-  window.onbeforeunload = function () {
-    return "Are you sure you want to leave?";
-  };
-
   if (route.query.pid == null || route.query.pid == "") {
     //show error message
     alert("missing participant ID")
