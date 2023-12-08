@@ -12,10 +12,10 @@
                 <p> 5 = I completely understand this sentence</p>
             </div>
             <div class="d-flex flex-column align-center elevation-1 pa-2 mb-2 rounded">
-                <h1>{{ currentItem.sentence }}</h1>
+                <h1>{{ store.currentItem?.sentence }}</h1>
                 <v-btn variant="outlined" :disabled="isPlaying" @click="play">Play <v-icon>play_circle_filled</v-icon></v-btn>     
             </div>
-            <img :src="getItem('stimuli/' + currentItem?.image)"/>       
+            <img :src="getItem('stimuli/' + store.currentItem?.image)"/>       
             <v-radio-group v-model="rating" inline class="mt-4" hide-details="">
                 <v-radio label="1" value="1" class="mr-4"></v-radio>
                 <v-radio label="2" value="2" class="mr-4"></v-radio>
@@ -38,7 +38,7 @@ import { useRouter } from 'vue-router'
 import UseWait from "@/composables/UseWait.js"
 import PreloaderComponent from "@/components/PreloaderComponent.vue";
 import UsePlaySound from "@/composables/UsePlaySound";
-//import { useStore } from "@/stores/store.js"
+import { useStore } from "@/stores/store.js"
 import UsePreload from "@/composables/UsePreload.js";
 const { getItem } = UsePreload(); 
 //import { getDatabase, ref as dbRef, child, serverTimestamp, push } from "firebase/database";
@@ -47,7 +47,7 @@ const { getItem } = UsePreload();
 const router = useRouter();
 const state = ref('fixation');
 const {wait} = UseWait();
-//const store = useStore();
+const store = useStore();
 
 onMounted(async ()=>{
     await preloaderComponent.value.startPreload();
@@ -55,18 +55,8 @@ onMounted(async ()=>{
     state.value = 'stimuli'
 })
 
-const list = ref([
-    {sentence:"The clown had a funny face", audio:"01_clown.mp3", image:"01_clown.jpg"},
-    {sentence:"The theory should drag her home into the ocean.", audio:"02_ocean.mp3", image:"02_ocean.jpg"},
-    {sentence:"The house had nine rooms", audio:"03_house.mp3", image:"03_house.jpg"},
-    {sentence:"Her duplex would tutor a dubious truck.", audio:"04_truck.mp3", image:"04_truck.jpg"},
-]);
 
-const index = ref(0);
-
-const currentItem = computed(() => list.value[index.value])
-
-const progress = computed(() => index.value + 1 + "/" + list.value.length)
+const progress = computed(() => store.index + 1 + "/" + store.list.length)
 
 const rating = ref(null);
 
@@ -74,7 +64,7 @@ const { playSoundAsync, isPlaying } = UsePlaySound();
 const play = async () => {
 
     //await playSoundAsync(getItem("sounds/" + store.currentItem.sentence_recording), 1, 0)
-    await playSoundAsync(getItem("stimuli/" + currentItem.value.audio, 1, 0));
+    await playSoundAsync(getItem("stimuli/" + store.currentItem?.audio, 1, 0));
 }
 
 const next = async () => {
@@ -82,7 +72,7 @@ const next = async () => {
     //note that firebase realtime database rules will need to be configured appropriately
     /*
     let dataToSave = {};
-    dataToSave.currentItem = currentItem.value;
+    dataToSave.currentItem = store.currentItem;
     dataToSave.rating = rating.value;
     dataToSave.timestamp = serverTimestamp();
     let rtdbRef = child(dbRef(getDatabase()), "/data/" + store.pid + "/" + dataToSave);
@@ -90,8 +80,7 @@ const next = async () => {
     */
     rating.value = null;
 
-    index.value += 1;
-    if (index.value >= list.value.length) {
+    if(store.nextItem() == "end"){
         router.push("/end");
     } else {
         state.value = 'fixation'
@@ -106,10 +95,10 @@ const preloaderDialog = ref(true)
 const preloaderComponent = ref(null)
 const continueClicked = () => {
     preloaderDialog.value = false;
-    if (index.value == null) {
-        index.value = -1;
+    if (store.index == null) {
+        store.index = -1;
     } else {
-        index.value--
+        store.index--
     }    
 /*     if (store.index == null) {
         store.index = -1;

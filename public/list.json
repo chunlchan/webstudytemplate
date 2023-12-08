@@ -1,0 +1,22 @@
+[
+    {
+        "sentence": "The clown had a funny face",
+        "audio": "01_clown.mp3",
+        "image": "01_clown.jpg"
+    },
+    {
+        "sentence": "The theory should drag her home into the ocean.",
+        "audio": "02_ocean.mp3",
+        "image": "02_ocean.jpg"
+    },
+    {
+        "sentence": "The house had nine rooms",
+        "audio": "03_house.mp3",
+        "image": "03_house.jpg"
+    },
+    {
+        "sentence": "Her duplex would tutor a dubious truck.",
+        "audio": "04_truck.mp3",
+        "image": "04_truck.jpg"
+    }
+]
