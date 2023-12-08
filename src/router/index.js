@@ -6,33 +6,33 @@ const router = createRouter({
     {
       path: '/',
       name: 'welcome',
-      component:  () => import('../views/WelcomeView.vue'),
+      component: () => import('../views/WelcomeView.vue'),
       meta: { oneWay: true }
     },
     {
       path: '/consent',
       name: 'consent',
-      component:  () => import('../views/ConsentView.vue'),
+      component: () => import('../views/ConsentView.vue'),
       meta: { oneWay: true }
     },
     {
       path: '/micTest',
       name: 'micTest',
-      component:  () => import('../views/MicTest.vue'),
+      component: () => import('../views/MicTest.vue'),
       meta: { oneWay: true }
-    },    
+    },
     {
       path: '/audioTest',
       name: 'audioTest',
-      component:  () => import('../views/AudioTest.vue'),
+      component: () => import('../views/AudioTest.vue'),
       meta: { oneWay: true }
     },
     {
       path: '/instructions',
       name: 'instructions',
-      component:  () => import('../views/InstructionsView.vue'),
+      component: () => import('../views/InstructionsView.vue'),
       meta: { oneWay: true }
-    },    
+    },
     {
       path: '/experiment',
       name: 'experiment',
@@ -44,19 +44,22 @@ const router = createRouter({
       name: 'end',
       component: () => import('../views/EndView.vue'),
       meta: { oneWay: true }
-    }    
+    }
   ]
 })
 
-//"oneWay" routes are only allowed to move forward, back button is efffectively disabled
-router.beforeEach(async (to, from, next) => {
-  if (next.name == 'end') {
-    window.onbeforeunload = null
+router.afterEach(async (to) => {
+  if (to.name == 'end') {
+    window.onbeforeunload = null;
   } else {
     window.onbeforeunload = function () {
       return "Are you sure you want to leave?";
     };
   }
+})
+
+//"oneWay" routes are only allowed to move forward, back button is efffectively disabled
+router.beforeEach(async (to, from, next) => {
   if (from.meta.oneWay == true) {
     let routes = router.getRoutes();
     let currentRoutePos;

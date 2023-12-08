@@ -11,16 +11,19 @@
                 <p> 1 = This sentence doesn't make sense to me</p>
                 <p> 5 = I completely understand this sentence</p>
             </div>
-            <h1 class="elevation-2 pa-2 ma-2">{{ currentItem.sentence }}</h1>
-            <img :src="getItem('stimuli/' + currentItem?.image)"/>            
-            <v-radio-group v-model="rating" inline>
+            <div class="d-flex flex-column align-center elevation-1 pa-2 mb-2 rounded">
+                <h1>{{ currentItem.sentence }}</h1>
+                <v-btn variant="outlined" :disabled="isPlaying" @click="play">Play <v-icon>play_circle_filled</v-icon></v-btn>     
+            </div>
+            <img :src="getItem('stimuli/' + currentItem?.image)"/>       
+            <v-radio-group v-model="rating" inline class="mt-4" hide-details="">
                 <v-radio label="1" value="1" class="mr-4"></v-radio>
                 <v-radio label="2" value="2" class="mr-4"></v-radio>
                 <v-radio label="3" value="3" class="mr-4"></v-radio>
                 <v-radio label="4" value="4" class="mr-4"></v-radio>
                 <v-radio label="5" value="5" class="mr-4"></v-radio>
             </v-radio-group>
-            <v-btn @click="next" :disabled="rating==null" color="primary" class="mt-4">next <v-icon>chevron_right</v-icon></v-btn>
+            <v-btn @click="next" :disabled="rating==null || isPlaying" class="mt-2" color="primary">next <v-icon>chevron_right</v-icon></v-btn>
             {{ progress }}
         </div>
     </v-container>
@@ -34,6 +37,7 @@ import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router'
 import UseWait from "@/composables/UseWait.js"
 import PreloaderComponent from "@/components/PreloaderComponent.vue";
+import UsePlaySound from "@/composables/UsePlaySound";
 //import { useStore } from "@/stores/store.js"
 import UsePreload from "@/composables/UsePreload.js";
 const { getItem } = UsePreload(); 
@@ -53,9 +57,9 @@ onMounted(async ()=>{
 
 const list = ref([
     {sentence:"The clown had a funny face", audio:"01_clown.mp3", image:"01_clown.jpg"},
-    {sentence:"The theory should drag her home into the ocean.", audio:"01_clown.mp3", image:"02_ocean.jpg"},
-    {sentence:"The house had nine rooms", audio:"01_clown.mp3", image:"03_house.jpg"},
-    {sentence:"Her duplex would tutor a dubious truck.", audio:"01_clown.mp3", image:"04_truck.jpg"},
+    {sentence:"The theory should drag her home into the ocean.", audio:"02_ocean.mp3", image:"02_ocean.jpg"},
+    {sentence:"The house had nine rooms", audio:"03_house.mp3", image:"03_house.jpg"},
+    {sentence:"Her duplex would tutor a dubious truck.", audio:"04_truck.mp3", image:"04_truck.jpg"},
 ]);
 
 const index = ref(0);
@@ -65,6 +69,13 @@ const currentItem = computed(() => list.value[index.value])
 const progress = computed(() => index.value + 1 + "/" + list.value.length)
 
 const rating = ref(null);
+
+const { playSoundAsync, isPlaying } = UsePlaySound();
+const play = async () => {
+
+    //await playSoundAsync(getItem("sounds/" + store.currentItem.sentence_recording), 1, 0)
+    await playSoundAsync(getItem("stimuli/" + currentItem.value.audio, 1, 0));
+}
 
 const next = async () => {
     //uncomment here to save to firebase
