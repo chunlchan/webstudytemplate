@@ -23,7 +23,7 @@
 
 <script setup>
 import InstructionsComponent from "@/components/InstructionsComponent.vue";
-import { useRouter } from "vue-router";
+import { useRouter } from 'vue-router';
 const router = useRouter();
 
 
