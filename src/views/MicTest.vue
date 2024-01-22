@@ -75,7 +75,7 @@
     </v-btn>
 
     <mic-level gain-indicator :volume="volume"></mic-level>
-    <v-btn color="primary" @click="next()" class="mt-10">
+    <v-btn color="primary" @click="next()" class="mt-10" :disabled="ready==false">
       Next
       <v-icon>navigate_next</v-icon>
     </v-btn>
@@ -87,15 +87,23 @@ import router from "../router";
 import MicLevel from "@/components/MicLevel.vue";
 import { onMounted, ref } from "vue";
 import useRecorder from '@/composables/useRecorder';
-
-
+import Swal from "sweetalert2";
 
 const dialog = ref(false);
 const dialog2 = ref(false);
+const ready = ref(false);
 
 const { startRecorder, stopRecorder, volume } = useRecorder();
 onMounted(() => {
-  startRecorder();
+  startRecorder().then(()=>{
+    ready.value = true;
+  }, ()=>{
+    Swal.fire({
+    title: "Microphone Access Needed",
+    text: "We need access to the microphone to proceed with this experiment. Please refresh this page and click allow when prompted for microphone permissions.",
+    icon: "error"
+  })
+  });
 })
 
 const next = () => {

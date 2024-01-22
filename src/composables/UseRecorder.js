@@ -10,28 +10,28 @@ export default function () {
             if (recorder != null) {
                 recorder.destroy();
             }
-            if(stream == null){
+            if (stream == null) {
                 navigator.mediaDevices
-                .getUserMedia({
-                    audio: {
-                        autoGainControl: false,
-                        echoCancellation: false,
-                        noiseSuppression: false,
-                    },
-                })
-                .then((newStream) => {
-                    stream = newStream;
-                    initiateRecordRTC(stream);
-                    resolve();
-                })
-                .catch(()=>{
-                    reject();
-                })
+                    .getUserMedia({
+                        audio: {
+                            autoGainControl: false,
+                            echoCancellation: false,
+                            noiseSuppression: false,
+                        },
+                    })
+                    .then((newStream) => {
+                        stream = newStream;
+                        initiateRecordRTC(stream);
+                        resolve();
+                    })
+                    .catch(() => {
+                        reject();
+                    })
             } else {
                 initiateRecordRTC(stream);
                 resolve();
             }
-            
+
         });
         return prm;
     };
@@ -56,16 +56,23 @@ export default function () {
     }
 
     const startRecorder = () => {
-        getMicAccess().then(() => {
-            recorder.startRecording();
-            startMeter();
-        })
+        let prm = new Promise((resolve, reject) => {
+            getMicAccess().then(() => {
+                recorder.startRecording();
+                startMeter();
+                resolve();
+            }).catch(() => {
+                reject();
+            })
+        }
+        )
+        return prm;
     };
 
 
     const stopRecorder = () => {
         let prm = new Promise((resolve) => {
-            recorder.stopRecording(()=>{
+            recorder.stopRecording(() => {
                 resolve(recorder.getBlob());
             })
             stopMeter();
