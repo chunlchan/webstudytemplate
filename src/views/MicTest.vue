@@ -86,7 +86,7 @@
 import router from "../router";
 import MicLevel from "@/components/MicLevel.vue";
 import { onMounted, ref } from "vue";
-import useRecorder from '@/composables/useRecorder';
+import useRecorder from '@/composables/UseRecorder';
 import Swal from "sweetalert2";
 
 const dialog = ref(false);
