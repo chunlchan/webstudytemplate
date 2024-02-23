@@ -41,8 +41,11 @@ import UsePlaySound from "@/composables/UsePlaySound";
 import { useStore } from "@/stores/store.js"
 import UsePreload from "@/composables/UsePreload.js";
 const { getItem } = UsePreload(); 
-//import { getDatabase, ref as dbRef, child, serverTimestamp, push } from "firebase/database";
 
+//uncomment here to save to firebase
+/*
+import { getDatabase, ref as dbRef, child, serverTimestamp, push } from "firebase/database";
+*/
 
 const router = useRouter();
 const state = ref('fixation');
@@ -71,12 +74,14 @@ const next = async () => {
     //uncomment here to save to firebase
     //note that firebase realtime database rules will need to be configured appropriately
     /*
-    let dataToSave = {};
-    dataToSave.currentItem = store.currentItem;
-    dataToSave.rating = rating.value;
-    dataToSave.timestamp = serverTimestamp();
-    let rtdbRef = child(dbRef(getDatabase()), "/data/" + store.pid + "/" + dataToSave);
-    push(rtdbRef, dataToSave);
+    if(store?.currentItem){
+        let dataToSave = {};
+        dataToSave.currentItem = store.currentItem;
+        dataToSave.rating = rating.value;
+        dataToSave.timestamp = serverTimestamp();
+        let rtdbRef = child(dbRef(getDatabase()), "/data/" + store.pid + "/");
+        push(rtdbRef, dataToSave);
+    }
     */
     rating.value = null;
 
