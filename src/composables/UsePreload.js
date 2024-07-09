@@ -1,6 +1,5 @@
 import Preload from 'preload-it';
 import { ref } from "vue";
-import Swal from 'sweetalert2';
 
 const preload = Preload();
 
@@ -15,13 +14,12 @@ export default function UsePreload() {
                 status.value = "complete";
                 resolve();
             }).catch((error) => {
-                Swal.fire({
-                    title: 'Preloader Error',
-                    icon: 'error',
-                    text: error
-                })
                 reject(error);
             });
+
+            preload.onerror = (error) => {
+                reject(error);
+            }
         })
         return prm;
     }

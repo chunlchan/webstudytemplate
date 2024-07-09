@@ -14,40 +14,43 @@
                     <v-icon>chevron_right</v-icon>
                 </v-btn>
             </div>
+
+            <v-alert v-if="errors && errors.length > 0" color="warning" icon="error" class="mt-4">
+                <p v-for="(error, errorKey) in errors" :key="errorKey">
+                    {{ error }}
+                </p>
+            </v-alert>
         </v-card-text>
     </v-card>
 </template>
 
 <script setup>
 import UsePreload from "@/composables/UsePreload.js";
-import Swal from 'sweetalert2';
 import * as Tone from 'tone';
 const { progress, loadItems, status } = UsePreload();
-
+import {ref} from "vue";
 
 const emit = defineEmits(["continue"]);
 
+const errors = ref([]);
+
 const startPreload = async () => {
     let items;
-    const fetchList = await fetch("manifest.json");
-    let manifest = await fetchList.json();
-    if(manifest == null){
-        Swal.fire({
-            title: 'Could not load manifest',
-            icon: 'error',
-            text: 'Try refreshing the browser or contact the experiment if this problem persists',
-        })
-        return null;
+    let manifest;
+
+    try {
+        const fetchList = await fetch("manifest.json");
+        manifest = await fetchList.json();    
+    } catch (error) {
+        errors.value.push("Could not load manifest! Try refreshing the browser or contact the experiment if this problem persists");
+        return null
     }
+   
 
     try {
         await loadItems(manifest);
     } catch (error) {
-        Swal.fire({
-            title: 'Could not preload items',
-            icon: 'error',
-            text: 'Try refreshing the browser or contact the experiment if this problem persists',
-        })
+        errors.value.push("Could not preload some items! Try refreshing the browser or contact the experiment if this problem persists");
         return null;
     }
     return (items);
